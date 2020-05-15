@@ -8,9 +8,9 @@ import java.util.Locale;
 public class PersonFormatter implements Formatter<Person> {
 
     @Override
-    public Person parse(String s, Locale locale) throws ParseException {
+    public Person parse(String text, Locale locale) throws ParseException {
         Person person = new Person();
-        person.setName(s);
+        person.setName(text);
         return person;
     }
 
