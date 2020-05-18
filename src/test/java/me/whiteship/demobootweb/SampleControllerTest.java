@@ -1,11 +1,14 @@
 package me.whiteship.demobootweb;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
+import org.json.JSONString;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.regex.Matcher;
@@ -23,6 +26,9 @@ public class SampleControllerTest {
 
     @Autowired
     PersonRepository personRepository;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     @Test
     public void hello() throws Exception {
@@ -52,6 +58,22 @@ public class SampleControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("hello"));
 
+    }
+
+    @Test
+    public void jsonMessage() throws Exception {
+        Person person = new Person();
+        person.setId(2019L);
+        person.setName("keesun");
+
+        String jsonString = objectMapper.writeValueAsString(person);
+
+        this.mockMvc.perform(get("/jsonMessage")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content(jsonString))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 
 }
